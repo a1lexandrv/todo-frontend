@@ -3,6 +3,7 @@ import styled from 'styled-components';
 interface ItemWrapperProps {
   isCompleted: boolean;
   isLoading?: boolean;
+  isPiority?: boolean;
 }
 
 export const ItemWrapper = styled.div<ItemWrapperProps>`
@@ -12,11 +13,18 @@ export const ItemWrapper = styled.div<ItemWrapperProps>`
   justify-content: space-between;
   align-items: center;
   gap: 24px;
-  background-color: ${({ isCompleted }) =>
-    isCompleted ? '#d9f7be' : '#fafafa'};
+  background-color: ${({ isCompleted, isPiority }) => {
+    if (isCompleted) {
+      return '#d9f7be';
+    } else if (isPiority) {
+      return '#efdbff';
+    } else {
+      return '#fafafa';
+    }
+  }};
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease-in-out;
-  position: relative; /* Для позиционирования выпадающего меню */
+  position: relative;
 `;
 
 export const OptionsWrapper = styled.div`

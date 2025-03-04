@@ -71,23 +71,26 @@ const TaskCreator = () => {
         onClose={handleCloseDrawer}
       >
         <InputWrapper>
-          <Title>Опишите задачу</Title>
-          <Input
-            style={{
-              backgroundColor: '#ffffff',
-              padding: '12px',
-              borderRadius: '16px',
-            }}
-            type="text"
-            size="large"
-            autoFocus
-            value={value}
-            status={!isValid ? 'error' : ''}
-            maxLength={100}
-            placeholder="Что вы хотите сделать"
-            onPressEnter={handleAddTodo}
-            onChange={(e) => setValue(e.target.value.trimStart())}
-          />
+          <Title>Создание задачи</Title>
+          <DateWrapperItem>
+            <h3>Описание</h3>
+            <Input
+              style={{
+                backgroundColor: '#ffffff',
+                padding: '12px',
+                borderRadius: '16px',
+              }}
+              type="text"
+              size="large"
+              autoFocus
+              value={value}
+              status={!isValid ? 'error' : ''}
+              maxLength={100}
+              placeholder="Что вы хотите сделать"
+              onPressEnter={handleAddTodo}
+              onChange={(e) => setValue(e.target.value.trimStart())}
+            />
+          </DateWrapperItem>
           <DateWrapper>
             <DateWrapperItem>
               <h3>Дата</h3>

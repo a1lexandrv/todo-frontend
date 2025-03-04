@@ -61,6 +61,7 @@ const ListItem: React.FC<ListItemProps> = ({ todo, handleOpenDrawer }) => {
     <ItemWrapper
       key={todo.id}
       isCompleted={todo.completed}
+      isPiority={todo.isPriority}
       isLoading={deleteTodoLoading || toggleTodoLoading}
     >
       <CustomCheckbox

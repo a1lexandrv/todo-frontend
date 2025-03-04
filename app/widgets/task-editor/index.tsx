@@ -75,22 +75,24 @@ const TaskEditor: React.FC<TaskEditorProps> = ({
     >
       <InputWrapper>
         <Title>Редактирование</Title>
-        <Input
-          style={{
-            backgroundColor: '#ffffff',
-            padding: '12px',
-            borderRadius: '16px',
-          }}
-          type="text"
-          size="large"
-          value={value}
-          status={!isValid ? 'error' : ''}
-          maxLength={100}
-          placeholder="Что вы хотите сделать"
-          onPressEnter={handleEditTodo}
-          onChange={(e) => setValue(e.target.value.trimStart())}
-        />
-
+        <DateWrapperItem>
+          <h3>Описание</h3>
+          <Input
+            style={{
+              backgroundColor: '#ffffff',
+              padding: '12px',
+              borderRadius: '16px',
+            }}
+            type="text"
+            size="large"
+            value={value}
+            status={!isValid ? 'error' : ''}
+            maxLength={100}
+            placeholder="Что вы хотите сделать"
+            onPressEnter={handleEditTodo}
+            onChange={(e) => setValue(e.target.value.trimStart())}
+          />
+        </DateWrapperItem>
         <DateWrapper>
           <DateWrapperItem>
             <h3>Дата</h3>
