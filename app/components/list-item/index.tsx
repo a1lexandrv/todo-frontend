@@ -75,7 +75,7 @@ const ListItem: React.FC<ListItemProps> = ({ todo, handleOpenDrawer }) => {
         placement="bottomLeft"
       >
         <Button type="text" shape="circle">
-          <BsThreeDotsVertical size={20} />
+          <BsThreeDotsVertical size={20} color="8c8c8c" />
         </Button>
       </Dropdown>
     </ItemWrapper>

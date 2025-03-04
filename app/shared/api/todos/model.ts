@@ -1,14 +1,20 @@
 import axios from 'axios';
-import type { Todo } from '~/shared/types/todo';
+import type { CreatingTodo, EditingTodo, Todo } from '~/shared/types/todo';
 
 export const getTodos = async (): Promise<Todo[]> => {
   const { data } = await axios.get<Todo[]>('http://localhost:3000/todos');
   return data;
 };
 
-export const addTodo = async (title: string): Promise<Todo> => {
+export const addTodo = async ({
+  title,
+  date,
+  isPriority,
+}: CreatingTodo): Promise<Todo> => {
   const { data } = await axios.post<Todo>('http://localhost:3000/todos', {
     title,
+    date,
+    isPriority,
   });
   return data;
 };
@@ -25,19 +31,18 @@ export const toggleTodo = async (id: number) => {
   return data;
 };
 
-export interface EditTodoParams {
-  id: number;
-  title: string;
-}
-
 export const editTodo = async ({
   id,
   title,
-}: EditTodoParams): Promise<Todo> => {
+  date,
+  isPriority,
+}: EditingTodo): Promise<Todo> => {
   const { data } = await axios.patch<Todo>(
     `http://localhost:3000/todos/${id}/edit`,
     {
       title,
+      date,
+      isPriority,
     },
   );
   return data;

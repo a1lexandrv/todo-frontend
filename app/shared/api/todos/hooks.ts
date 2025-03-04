@@ -1,14 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { AxiosError } from 'axios';
-import type { Todo } from '~/shared/types/todo';
-import {
-  addTodo,
-  deleteTodo,
-  editTodo,
-  getTodos,
-  toggleTodo,
-  type EditTodoParams,
-} from './model';
+import type { CreatingTodo, EditingTodo, Todo } from '~/shared/types/todo';
+import { addTodo, deleteTodo, editTodo, getTodos, toggleTodo } from './model';
 
 export const useGetTodos = () => {
   return useQuery<Todo[], AxiosError>({
@@ -17,13 +10,14 @@ export const useGetTodos = () => {
   });
 };
 
-export const useAddTodo = () => {
+export const useAddTodo = (onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation<Todo, AxiosError, string>({
+  return useMutation<Todo, AxiosError, CreatingTodo>({
     mutationFn: addTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
+      onSuccess?.();
     },
   });
 };
@@ -53,7 +47,7 @@ export const useToggleTodo = () => {
 export const useEditTodo = (onSuccess: () => void) => {
   const queryClient = useQueryClient();
 
-  return useMutation<Todo, AxiosError, EditTodoParams>({
+  return useMutation<Todo, AxiosError, EditingTodo>({
     mutationFn: editTodo,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });

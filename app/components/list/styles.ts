@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const ListWrapper = styled.div`
-  padding: 0 24px 12px;
+  padding: 4px 24px 12px;
   max-height: 100%;
   overflow-y: auto;
   scrollbar-width: none;

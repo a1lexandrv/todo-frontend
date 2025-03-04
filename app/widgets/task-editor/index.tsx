@@ -1,9 +1,10 @@
 import { useEffect, useState, type SetStateAction } from 'react';
-import { Button, Input } from 'antd';
+import { Button, Input, DatePicker, Switch } from 'antd';
+import dayjs from 'dayjs';
 import Drawer from '~/shared/ui/drawer';
 import { useEditTodo } from '~/shared/api/todos/hooks';
 import type { Todo } from '~/shared/types/todo';
-import { InputWrapper, Title } from './styles';
+import { DateWrapper, DateWrapperItem, InputWrapper, Title } from './styles';
 
 interface TaskEditorProps {
   isOpenDrawer: boolean;
@@ -17,33 +18,53 @@ const TaskEditor: React.FC<TaskEditorProps> = ({
   editingTodo,
 }) => {
   const [value, setValue] = useState('');
+  const [date, setDate] = useState<string | undefined>(undefined);
+  const [isPriority, setIsPriority] = useState<boolean>(false);
   const [isValid, setValid] = useState(false);
 
-  const {
-    mutate: editTodo,
-    isPending: editTodoLoading,
-    isError: editTodosError,
-  } = useEditTodo(() => handleCloseDrawer());
+  const dateFormat = 'DD-MM-YYYY';
+  const today = dayjs().startOf('day');
+
+  const { mutate: editTodo, isPending: editTodoLoading } = useEditTodo(() =>
+    handleCloseDrawer(),
+  );
 
   const handleCloseDrawer = () => {
+    setValue('');
+    setDate(undefined);
+    setIsPriority(false);
     setOpenDrawer(false);
   };
 
   const handleEditTodo = (): void => {
     if (!value.trim() || !editingTodo) return;
-    editTodo({ id: editingTodo.id, title: value });
+
+    editTodo({
+      id: editingTodo.id,
+      title: value,
+      date,
+      isPriority,
+    });
+  };
+
+  const onDateChange = (newDate: dayjs.Dayjs | null) => {
+    setDate(newDate ? newDate.format(dateFormat) : undefined);
+  };
+
+  const onSwitchChange = (checked: boolean) => {
+    setIsPriority(checked);
   };
 
   useEffect(() => {
     if (editingTodo) {
       setValue(editingTodo.title);
+      setDate(editingTodo.date);
+      setIsPriority(editingTodo.isPriority || false);
     }
   }, [editingTodo]);
 
   useEffect(() => {
-    if (!value.length || value.length > 99) {
-      setValid(false);
-    } else setValid(true);
+    setValid(value.length > 0 && value.length <= 99);
   }, [value]);
 
   return (
@@ -69,6 +90,32 @@ const TaskEditor: React.FC<TaskEditorProps> = ({
           onPressEnter={handleEditTodo}
           onChange={(e) => setValue(e.target.value.trimStart())}
         />
+
+        <DateWrapper>
+          <DateWrapperItem>
+            <h3>Дата</h3>
+            <DatePicker
+              style={{
+                backgroundColor: '#ffffff',
+                padding: '12px',
+                borderRadius: '16px',
+              }}
+              format={dateFormat}
+              defaultPickerValue={dayjs(today)}
+              value={date ? dayjs(date, dateFormat) : null}
+              getPopupContainer={(t) => t.parentElement as HTMLElement}
+              disabledDate={(current) => current && current.isBefore(today)}
+              onChange={(newDate) => onDateChange(newDate ? newDate : null)}
+              placeholder="Выберите дату"
+            />
+          </DateWrapperItem>
+
+          <DateWrapperItem>
+            <h3>Приоритетность</h3>
+            <Switch checked={isPriority} onChange={onSwitchChange} />
+          </DateWrapperItem>
+        </DateWrapper>
+
         <Button
           style={{
             backgroundColor: '#4096ff',
