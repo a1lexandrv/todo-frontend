@@ -20,6 +20,7 @@ export const List = styled.div`
 
 export const EmptyState = styled.div`
   padding: 0 24px 12px;
+  height: 100%;
   color: #8c8c8c;
   display: flex;
   flex-direction: column;

@@ -12,7 +12,7 @@ import { List, ListWrapper, EmptyState } from './styles';
 
 export const TaskList = () => {
   const [isOpenEditorDrawer, setOpenEditorDrawer] = useState(false);
-  const [isDrawerErrorOpen, setIsDrawerErrorOpen] = useState(true);
+  const [isDrawerErrorOpen, setIsDrawerErrorOpen] = useState(false);
   const [editingTodo, setEditingTodo] = useState<Todo | null>(null);
 
   const { data: todos, isLoading, isError } = useGetTodos();
@@ -39,15 +39,6 @@ export const TaskList = () => {
     setIsDrawerErrorOpen(false);
   };
 
-  if (todos?.length === 0 && !isLoading) {
-    return (
-      <EmptyState>
-        <AiFillSignature size={32} />
-        <p>Список задач пуст</p>
-      </EmptyState>
-    );
-  }
-
   if (isError) {
     return (
       <EmptyState>
@@ -60,21 +51,28 @@ export const TaskList = () => {
   return (
     <>
       <ListWrapper ref={listRef}>
-        <List
-          style={{ transform: `translateY(${offset}px)`, transition }}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          {todos?.map((todo) => (
-            <ListItem
-              key={todo.id}
-              todo={todo}
-              handleOpenDrawer={handleOpenDrawer}
-              setOpenErrorDrawer={handleOpenErrorDrawer}
-            />
-          ))}
-        </List>
+        {todos?.length === 0 && !isLoading ? (
+          <EmptyState>
+            <AiFillSignature size={32} />
+            <p>Список задач пуст</p>
+          </EmptyState>
+        ) : (
+          <List
+            style={{ transform: `translateY(${offset}px)`, transition }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+          >
+            {todos?.map((todo) => (
+              <ListItem
+                key={todo.id}
+                todo={todo}
+                handleOpenDrawer={handleOpenDrawer}
+                setOpenErrorDrawer={handleOpenErrorDrawer}
+              />
+            ))}
+          </List>
+        )}
       </ListWrapper>
       <TaskCreator setOpenErrorDrawer={handleOpenErrorDrawer} />
       <TaskEditor
