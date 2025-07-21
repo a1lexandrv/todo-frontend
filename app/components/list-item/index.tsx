@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { FaEdit, FaTrash } from 'react-icons/fa';
 import CustomCheckbox from '~/shared/ui/custom-checkbox';
 import { useDeleteTodo, useToggleTodo } from '~/shared/api/todos/hooks';
@@ -9,9 +10,14 @@ import { ItemWrapper, DropdownListItem } from './styles';
 interface ListItemProps {
   todo: Todo;
   handleOpenDrawer: (param: Todo) => void;
+  setOpenErrorDrawer: () => void;
 }
 
-const ListItem: React.FC<ListItemProps> = ({ todo, handleOpenDrawer }) => {
+const ListItem: React.FC<ListItemProps> = ({
+  todo,
+  handleOpenDrawer,
+  setOpenErrorDrawer,
+}) => {
   const {
     mutate: deleteTodo,
     isPending: deleteTodoLoading,
@@ -27,6 +33,12 @@ const ListItem: React.FC<ListItemProps> = ({ todo, handleOpenDrawer }) => {
   const handleDeleteTodo = (id: number): void => {
     deleteTodo(id);
   };
+
+  useEffect(() => {
+    if (deleteTodosError || toggleTodosError) {
+      setOpenErrorDrawer();
+    }
+  }, [deleteTodosError, toggleTodosError]);
 
   const items = [
     {

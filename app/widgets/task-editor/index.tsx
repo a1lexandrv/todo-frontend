@@ -1,7 +1,8 @@
 import { useEffect, useState, type SetStateAction } from 'react';
-import { Button, Input, DatePicker, Switch } from 'antd';
+import { Input, DatePicker, Switch } from 'antd';
 import dayjs from 'dayjs';
 import Drawer from '~/shared/ui/drawer';
+import Button from '~/shared/ui/button';
 import { useEditTodo } from '~/shared/api/todos/hooks';
 import type { Todo } from '~/shared/types/todo';
 import { DateWrapper, DateWrapperItem, InputWrapper, Title } from './styles';
@@ -10,12 +11,14 @@ interface TaskEditorProps {
   isOpenDrawer: boolean;
   editingTodo: Todo | null;
   setOpenDrawer: React.Dispatch<SetStateAction<boolean>>;
+  setOpenErrorDrawer: () => void;
 }
 
 const TaskEditor: React.FC<TaskEditorProps> = ({
   isOpenDrawer,
-  setOpenDrawer,
   editingTodo,
+  setOpenDrawer,
+  setOpenErrorDrawer,
 }) => {
   const [value, setValue] = useState('');
   const [date, setDate] = useState<string | undefined>(undefined);
@@ -25,9 +28,11 @@ const TaskEditor: React.FC<TaskEditorProps> = ({
   const dateFormat = 'DD-MM-YYYY';
   const today = dayjs().startOf('day');
 
-  const { mutate: editTodo, isPending: editTodoLoading } = useEditTodo(() =>
-    handleCloseDrawer(),
-  );
+  const {
+    mutate: editTodo,
+    isPending: editTodoLoading,
+    isError: editTodoError,
+  } = useEditTodo(() => handleCloseDrawer());
 
   const handleCloseDrawer = () => {
     setValue('');
@@ -66,6 +71,12 @@ const TaskEditor: React.FC<TaskEditorProps> = ({
   useEffect(() => {
     setValid(value.length > 0 && value.length <= 99);
   }, [value]);
+
+  useEffect(() => {
+    if (editTodoError) {
+      setOpenErrorDrawer();
+    }
+  }, [editTodoError]);
 
   return (
     <Drawer
@@ -119,19 +130,14 @@ const TaskEditor: React.FC<TaskEditorProps> = ({
         </DateWrapper>
 
         <Button
-          style={{
-            backgroundColor: '#4096ff',
-            padding: '24px',
-            borderRadius: '16px',
-          }}
+          text="Сохранить"
+          type="primary"
+          size="large"
+          backgroundColor="#4096ff"
           onClick={handleEditTodo}
           loading={editTodoLoading}
           disabled={!isValid}
-          size="large"
-          type="primary"
-        >
-          <p style={{ fontSize: '16px' }}>Сохранить</p>
-        </Button>
+        />
       </InputWrapper>
     </Drawer>
   );

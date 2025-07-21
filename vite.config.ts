@@ -4,6 +4,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [reactRouter(), tsconfigPaths()],
+  define: {
+    'process.env': process.env,
+  },
   ssr: {
     noExternal: ['styled-components'],
   },

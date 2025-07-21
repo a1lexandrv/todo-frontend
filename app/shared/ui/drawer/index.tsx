@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { Backdrop, DrawerContent, DrawerWrapper, Handle } from './styles';
 
-interface DrawerProps {
+export interface DrawerProps {
   open: boolean;
-  onClose: () => void;
   children: React.ReactNode;
   height?: string;
+  onClose: () => void;
 }
 
 const Drawer: React.FC<DrawerProps> = ({

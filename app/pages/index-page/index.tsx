@@ -1,6 +1,5 @@
 import Header from '~/widgets/header';
-import TaskCreator from '~/widgets/task-creator';
-import { TaskList } from '~/components/list';
+import { TaskList } from '~/widgets/task-list';
 import { Wrapper } from './styles';
 
 export function IndexPage() {
@@ -9,7 +8,6 @@ export function IndexPage() {
       <Wrapper>
         <Header />
         <TaskList />
-        <TaskCreator />
       </Wrapper>
     </>
   );
