@@ -2,7 +2,7 @@ import API from '../config';
 import type { CreatingTodo, EditingTodo, Todo } from '~/shared/types/todo';
 
 export const getTodos = async (): Promise<Todo[]> => {
-  const { data } = await API.get<Todo[]>('http://localhost:3000/todos');
+  const { data } = await API.get<Todo[]>('todos');
   return data;
 };
 
@@ -11,7 +11,7 @@ export const addTodo = async ({
   date,
   isPriority,
 }: CreatingTodo): Promise<Todo> => {
-  const { data } = await API.post<Todo>('http://localhost:3000/todos', {
+  const { data } = await API.post<Todo>('todos', {
     title,
     date,
     isPriority,
@@ -20,12 +20,12 @@ export const addTodo = async ({
 };
 
 export const deleteTodo = async (id: number) => {
-  const { data } = await API.delete(`http://localhost:3000/todos/${id}`);
+  const { data } = await API.delete(`todos/${id}`);
   return data;
 };
 
 export const toggleTodo = async (id: number) => {
-  const { data } = await API.patch(`http://localhost:3000/todos/${id}/toggle`);
+  const { data } = await API.patch(`todos/${id}/toggle`);
   return data;
 };
 
@@ -35,13 +35,10 @@ export const editTodo = async ({
   date,
   isPriority,
 }: EditingTodo): Promise<Todo> => {
-  const { data } = await API.patch<Todo>(
-    `http://localhost:3000/todos/${id}/edit`,
-    {
-      title,
-      date,
-      isPriority,
-    },
-  );
+  const { data } = await API.patch<Todo>(`todos/${id}/edit`, {
+    title,
+    date,
+    isPriority,
+  });
   return data;
 };
